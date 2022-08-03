@@ -54,16 +54,20 @@ public class Main {
         System.out.println(taskManager.getAllSubTasks().toString());
         System.out.println(taskManager.getAllEpicTasks().toString());
         taskManager.deleteSubTaskByID(6);
-        System.out.println(taskManager.getAllSubTasks().toString());
         System.out.println(taskManager.getAllEpicTasks().toString());
+        System.out.println(taskManager.getAllSubTasks().toString());
         taskManager.deleteAllSubTasks();
-        System.out.println(taskManager.getAllSubTasks().toString());
         System.out.println(taskManager.getAllEpicTasks().toString());
-        taskManager.addSubTask(new SubTask(0, "выбрать фильм", "самая сложная задача", IN_PROGRESS, 4));
         System.out.println(taskManager.getAllSubTasks().toString());
+        taskManager.addSubTask(new SubTask(0, "выбрать фильм", "самая сложная задача", NEW, 4));
+        taskManager.addSubTask(new SubTask(0, "выбрать фильм", "самая сложная задача", DONE, 4));
         System.out.println(taskManager.getAllEpicTasks().toString());
+        System.out.println(taskManager.getAllSubTasks().toString());
         taskManager.updateEpicNameAndDescription(4, "пойдем в боулинг", "современное кино - стыд и позор");
-        System.out.println(taskManager.getAllSubTasks().toString());
         System.out.println(taskManager.getAllEpicTasks().toString());
+        System.out.println(taskManager.getAllSubTasks().toString());
+        taskManager.updateEpic(new Epic(4, "!!!!!!!!!!!", "!!!!!!!!!!!!!!", NEW));
+        System.out.println(taskManager.getAllEpicTasks().toString());
+        System.out.println(taskManager.getAllSubTasks().toString());
     }
 }

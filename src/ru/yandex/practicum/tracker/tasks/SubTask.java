@@ -5,7 +5,7 @@ import ru.yandex.practicum.tracker.tasks.SimpleTask;
 import java.util.Objects;
 
 public class SubTask extends SimpleTask {
-    protected int epicID;
+    private int epicID;
 
     public SubTask(int id, String name, String description, Status currentProgress, int epicID) {
         super(id, name, description, currentProgress);

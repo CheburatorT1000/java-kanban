@@ -8,10 +8,14 @@ import java.util.HashMap;
 import static ru.yandex.practicum.tracker.tasks.Status.*;
 
 public class TaskManager {
-    private int nextID = 1;
+    private int nextID = 0;
     private HashMap<Integer, SimpleTask> simpleTasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, SubTask> subTasks = new HashMap<>();
+
+    private int makeID() {
+        return ++nextID;
+    }
 
     // Получение списка всех задач
     public ArrayList<SimpleTask> getAllSimpleTasks() {
@@ -83,17 +87,17 @@ public class TaskManager {
 
     // Создание задачи
     public void addSimpleTask(SimpleTask task) {
-        task.setId(nextID++);
+        task.setId(makeID());
         simpleTasks.put(task.getId(), task);
     }
 
     public void addEpicTask(Epic epic) {
-        epic.setId(nextID++);
+        epic.setId(makeID());
         epics.put(epic.getId(), epic);
     }
 
     public void addSubTask(SubTask subTask) {
-        subTask.setId(nextID++);
+        subTask.setId(makeID());
         subTasks.put(subTask.getId(), subTask);
         Epic epic = epics.get(subTask.getEpicID());
         epic.addSubTask(subTask.getId());
@@ -104,9 +108,13 @@ public class TaskManager {
     public void updateSimpleTask(SimpleTask simpleTask) {
         simpleTasks.put(simpleTask.getId(), simpleTask);
     }
-
-    private void updateEpic(Epic epic) {
-        epics.put(epic.getId(), epic);
+/*
+    Тут мне надо было чуть дольше подумать), мы берем оригинальный обьект копируем в него только разрешенные переменные
+*/
+    public void updateEpic(Epic epic) {
+        Epic epicOriginal = epics.get(epic.getId());
+        epicOriginal.setName(epic.getName());
+        epicOriginal.setDescription(epic.getDescription());
     }
     public void updateEpicNameAndDescription(int epicID, String name, String description) {
         Epic epic = epics.get(epicID);
@@ -146,8 +154,6 @@ public class TaskManager {
         epic.setSubTasksIDs(subTasksIDs);
         updateEpicStatus(epic);
         subTasks.remove(id);
-        updateEpic(epic);
-        System.out.println(subTasks.toString());
     }
 
     // Получение списка подзадач определенного эпика
@@ -160,31 +166,26 @@ public class TaskManager {
     // метод для определения статуса эпика
     private void updateEpicStatus(Epic epic) {
         int epicStatusCount = 0;
+        for ( int subTasksIdNum : epic.getSubTasksIDs()) {
+            SubTask subTask = subTasks.get(subTasksIdNum);
+            switch (subTask.getStatus()) {
+                case IN_PROGRESS: {
+                    epicStatusCount++;
+                    break;
+                }
+                case DONE: {
+                    epicStatusCount += 2;
+                    break;
+                }
+            }
+        }//старался сделать код проще
         if ( epic.getSubTasksIDs().isEmpty() )
             epic.setStatus(NEW);
-        else {
-            for ( int subTasksIdNum : epic.getSubTasksIDs()) {
-                SubTask subTask = subTasks.get(subTasksIdNum);
-                switch (subTask.currentProgress) {
-                    case IN_PROGRESS: {
-                        epicStatusCount++;
-                        break;
-                    }
-                    case DONE: {
-                        epicStatusCount += 2;
-                        break;
-                    }
-                }
-                if (epic.getSubTasksIDs().isEmpty())
-                    epic.setStatus(NEW);
-                else if (epicStatusCount == 0)
-                    epic.setStatus(NEW);
-                else if (epicStatusCount / epic.getSubTasksIDs().size() == 2)
-                    epic.setStatus(DONE);
-                else
-                    epic.setStatus(IN_PROGRESS);
-                epics.put(epic.getId(), epic);
-            }
-        }
+        else if ( epicStatusCount == 0 )
+            epic.setStatus(NEW);
+        else if (epicStatusCount / epic.getSubTasksIDs().size() == 2)
+            epic.setStatus(DONE);
+        else
+            epic.setStatus(IN_PROGRESS);
     }
 }

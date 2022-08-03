@@ -5,7 +5,7 @@ public class SimpleTask {
     protected int id;
     protected String name;
     protected String description;
-    public Status currentProgress;
+    protected Status currentProgress;
 
     public SimpleTask(int id, String name, String description, Status currentProgress) {
         this.id = id;
