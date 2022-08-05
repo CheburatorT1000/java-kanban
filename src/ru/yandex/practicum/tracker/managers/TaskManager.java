@@ -106,27 +106,26 @@ public class TaskManager {
 
     // Обновление задачи
     public void updateSimpleTask(SimpleTask simpleTask) {
-        simpleTasks.put(simpleTask.getId(), simpleTask);
+        if ( simpleTasks.containsKey(simpleTask.getId()) )
+            simpleTasks.put(simpleTask.getId(), simpleTask);
     }
 /*
     Тут мне надо было чуть дольше подумать), мы берем оригинальный обьект копируем в него только разрешенные переменные
 */
     public void updateEpic(Epic epic) {
-        Epic epicOriginal = epics.get(epic.getId());
-        epicOriginal.setName(epic.getName());
-        epicOriginal.setDescription(epic.getDescription());
-    }
-    public void updateEpicNameAndDescription(int epicID, String name, String description) {
-        Epic epic = epics.get(epicID);
-        epic.setName(name);
-        epic.setDescription(description);
-        epics.put(epic.getId(), epic);
+        if ( epics.containsKey(epic.getId()) ) {
+            Epic epicOriginal = epics.get(epic.getId());
+            epicOriginal.setName(epic.getName());
+            epicOriginal.setDescription(epic.getDescription());
+        }
     }
 
     public void updateSubTask(SubTask subTask) {
-        subTasks.put(subTask.getId(), subTask);
-        Epic epic = epics.get(subTask.getEpicID());
-        updateEpicStatus(epic);
+        if ( subTasks.containsKey(subTask.getId()) ) {
+            subTasks.put(subTask.getId(), subTask);
+            Epic epic = epics.get(subTask.getEpicID());
+            updateEpicStatus(epic);
+        }
     }
     // Удаление по идентификатору
     public void deleteSimpleTaskByID(int id) {
@@ -178,10 +177,8 @@ public class TaskManager {
                     break;
                 }
             }
-        }//старался сделать код проще
-        if ( epic.getSubTasksIDs().isEmpty() )
-            epic.setStatus(NEW);
-        else if ( epicStatusCount == 0 )
+        }
+        if ( epic.getSubTasksIDs().isEmpty() || epicStatusCount == 0 )
             epic.setStatus(NEW);
         else if (epicStatusCount / epic.getSubTasksIDs().size() == 2)
             epic.setStatus(DONE);
