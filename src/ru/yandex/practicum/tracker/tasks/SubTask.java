@@ -1,7 +1,5 @@
 package ru.yandex.practicum.tracker.tasks;
 
-import ru.yandex.practicum.tracker.tasks.SimpleTask;
-
 import java.util.Objects;
 
 public class SubTask extends SimpleTask {

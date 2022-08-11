@@ -1,24 +1,21 @@
 package ru.yandex.practicum.tracker.managers;
 
-import ru.yandex.practicum.tracker.tasks.SimpleTask;
-
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
-public class InMemoryHistoryManager<T extends SimpleTask> implements HistoryManager<T>{
-
-    private List<T> historyTasks = new ArrayList<T>();
+public class InMemoryHistoryManager<SimpleTask> implements HistoryManager<SimpleTask> {
+    private final int LIST_MAX_SIZE = 10;
+    private LinkedList<SimpleTask> historyTasks = new LinkedList<SimpleTask>();
 
     @Override
-    public void add(T task) {
-        if ( historyTasks.size() == 10 ) {
-            historyTasks.remove(0);
-            historyTasks.add(task);
-        } else
-            historyTasks.add(task);
+    public void add(SimpleTask task) {
+        historyTasks.add(task);
+        if (historyTasks.size() > LIST_MAX_SIZE)
+            historyTasks.removeFirst();
     }
+
     @Override
-    public List<T> getHistory() {
+    public List<SimpleTask> getHistory() {
         return historyTasks;
     }
 }

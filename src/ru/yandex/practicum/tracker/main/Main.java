@@ -11,20 +11,19 @@ import static ru.yandex.practicum.tracker.tasks.Status.*;
 public class Main {
 
     public static void main(String[] args) {
-
         TaskManager inMemoryTaskManager = Managers.getDefault();
 
         System.out.println("Создаем задачи");
-        inMemoryTaskManager.addSimpleTask(new SimpleTask(0, "Убраться в доме", "чистота залог здоровья" , NEW));
-        inMemoryTaskManager.addSimpleTask(new SimpleTask(0, "Убраться во дворе", "чистота залог здоровья" , DONE));
-        inMemoryTaskManager.addSimpleTask(new SimpleTask(0, "Убраться в шкафу", "чистота залог здоровья" , IN_PROGRESS));
+        inMemoryTaskManager.addSimpleTask(new SimpleTask(0, "Убраться в доме", "чистота залог здоровья", NEW));
+        inMemoryTaskManager.addSimpleTask(new SimpleTask(0, "Убраться во дворе", "чистота залог здоровья", DONE));
+        inMemoryTaskManager.addSimpleTask(new SimpleTask(0, "Убраться в шкафу", "чистота залог здоровья", IN_PROGRESS));
         System.out.println(inMemoryTaskManager.getAllSimpleTasks().toString());
         System.out.println("удаляем одну");
         inMemoryTaskManager.deleteSimpleTaskByID(2);
         System.out.println("смотрим");
         System.out.println(inMemoryTaskManager.getAllSimpleTasks().toString());
         System.out.println("обновляем одну");
-        inMemoryTaskManager.updateSimpleTask(new SimpleTask(1, "Убраться в доме", "чистота залог здоровья" , DONE));
+        inMemoryTaskManager.updateSimpleTask(new SimpleTask(1, "Убраться в доме", "чистота залог здоровья", DONE));
         System.out.println("смотрим");
         System.out.println(inMemoryTaskManager.getAllSimpleTasks().toString());
         System.out.println("удаляем все задачи");
@@ -68,14 +67,21 @@ public class Main {
         inMemoryTaskManager.updateEpic(new Epic(4, "!!!!!!!!!!!", "!!!!!!!!!!!!!!", NEW));
         System.out.println(inMemoryTaskManager.getAllEpicTasks().toString());
         System.out.println(inMemoryTaskManager.getAllSubTasks().toString());
+        inMemoryTaskManager.addSimpleTask(new SimpleTask(0, "Убраться в доме", "чистота залог здоровья", NEW));
+        inMemoryTaskManager.getEpicTaskByID(4);
+        inMemoryTaskManager.getEpicTaskByID(4);
+        inMemoryTaskManager.getSubTaskByID(8);
+        inMemoryTaskManager.getEpicTaskByID(4);
+        inMemoryTaskManager.getSimpleTaskByID(10);
+        inMemoryTaskManager.getEpicTaskByID(4);
+        inMemoryTaskManager.getEpicTaskByID(4);
         inMemoryTaskManager.getEpicTaskByID(4);
         inMemoryTaskManager.getEpicTaskByID(4);
         inMemoryTaskManager.getSubTaskByID(8);
         inMemoryTaskManager.getEpicTaskByID(4);
         inMemoryTaskManager.getEpicTaskByID(4);
         inMemoryTaskManager.getEpicTaskByID(4);
-        inMemoryTaskManager.addSimpleTask(new SimpleTask(0, "Убраться в доме", "чистота залог здоровья" , NEW));
         inMemoryTaskManager.getSimpleTaskByID(10);
-        inMemoryTaskManager.getHistory();
+        System.out.println(inMemoryTaskManager.getHistory().toString());
     }
 }

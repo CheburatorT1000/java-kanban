@@ -6,17 +6,18 @@ import ru.yandex.practicum.tracker.tasks.SubTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static ru.yandex.practicum.tracker.tasks.Status.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
 
-    HistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
+    private HistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
     private int nextID = 0;
-    private HashMap<Integer, SimpleTask> simpleTasks = new HashMap<>();
-    private HashMap<Integer, Epic> epics = new HashMap<>();
-    private HashMap<Integer, SubTask> subTasks = new HashMap<>();
+    private final HashMap<Integer, SimpleTask> simpleTasks = new HashMap<>();
+    private final HashMap<Integer, Epic> epics = new HashMap<>();
+    private final HashMap<Integer, SubTask> subTasks = new HashMap<>();
 
 
     private int makeID() {
@@ -26,7 +27,7 @@ public class InMemoryTaskManager implements TaskManager {
     // метод для определения статуса эпика
     private void updateEpicStatus(Epic epic) {
         int epicStatusCount = 0;
-        for ( int subTasksIdNum : epic.getSubTasksIDs()) {
+        for (int subTasksIdNum : epic.getSubTasksIDs()) {
             SubTask subTask = subTasks.get(subTasksIdNum);
             switch (subTask.getStatus()) {
                 case IN_PROGRESS: {
@@ -39,7 +40,7 @@ public class InMemoryTaskManager implements TaskManager {
                 }
             }
         }
-        if ( epic.getSubTasksIDs().isEmpty() || epicStatusCount == 0 )
+        if (epic.getSubTasksIDs().isEmpty() || epicStatusCount == 0)
             epic.setStatus(NEW);
         else if (epicStatusCount / epic.getSubTasksIDs().size() == 2)
             epic.setStatus(DONE);
@@ -47,21 +48,21 @@ public class InMemoryTaskManager implements TaskManager {
             epic.setStatus(IN_PROGRESS);
     }
 
-
-    public void getHistory() {
+    @Override
+    public List<SimpleTask> getHistory() {
+        return inMemoryHistoryManager.getHistory();
     }
 
     // Получение списка подзадач определенного эпика
     @Override
-    public ArrayList<Integer> getSubTasksFromEpic(int id) {
+    public List<Integer> getSubTasksFromEpic(int id) {
         Epic epic = epics.get(id);
-        ArrayList<Integer> subTasksIDsList = epic.getSubTasksIDs();
-        return subTasksIDsList;
+        return epic.getSubTasksIDs();
     }
 
     // Получение списка всех задач
     @Override
-    public ArrayList<SimpleTask> getAllSimpleTasks() {
+    public List<SimpleTask> getAllSimpleTasks() {
         ArrayList<SimpleTask> simpleTasksList = new ArrayList<>();
         for (int simpleTaskID : simpleTasks.keySet()) {
             simpleTasksList.add(simpleTasks.get(simpleTaskID));
@@ -70,7 +71,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Epic> getAllEpicTasks() {
+    public List<Epic> getAllEpicTasks() {
         ArrayList<Epic> epicTasksList = new ArrayList<>();
         for (int epicTaskID : epics.keySet()) {
             epicTasksList.add(epics.get(epicTaskID));
@@ -79,7 +80,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<SubTask> getAllSubTasks() {
+    public List<SubTask> getAllSubTasks() {
         ArrayList<SubTask> subTasksList = new ArrayList<>();
         for (int subTaskID : subTasks.keySet()) {
             subTasksList.add(subTasks.get(subTaskID));
@@ -95,7 +96,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllEpicTasks() {
-        for ( int epicKey : epics.keySet() ) {
+        for (int epicKey : epics.keySet()) {
             Epic epicToDelete = epics.get(epicKey);
             ArrayList<Integer> subTasksIDs = epicToDelete.getSubTasksIDs();
             for (int subTasksID : subTasksIDs) {
@@ -164,15 +165,13 @@ public class InMemoryTaskManager implements TaskManager {
     // Обновление задачи
     @Override
     public void updateSimpleTask(SimpleTask simpleTask) {
-        if ( simpleTasks.containsKey(simpleTask.getId()) )
+        if (simpleTasks.containsKey(simpleTask.getId()))
             simpleTasks.put(simpleTask.getId(), simpleTask);
     }
-    /*
-        Тут мне надо было чуть дольше подумать), мы берем оригинальный обьект копируем в него только разрешенные переменные
-    */
+
     @Override
     public void updateEpic(Epic epic) {
-        if ( epics.containsKey(epic.getId()) ) {
+        if (epics.containsKey(epic.getId())) {
             Epic epicOriginal = epics.get(epic.getId());
             epicOriginal.setName(epic.getName());
             epicOriginal.setDescription(epic.getDescription());
@@ -181,12 +180,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateSubTask(SubTask subTask) {
-        if ( subTasks.containsKey(subTask.getId()) ) {
+        if (subTasks.containsKey(subTask.getId())) {
             subTasks.put(subTask.getId(), subTask);
             Epic epic = epics.get(subTask.getEpicID());
             updateEpicStatus(epic);
         }
     }
+
     // Удаление по идентификатору
     @Override
     public void deleteSimpleTaskByID(int id) {
@@ -196,7 +196,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteEpicByID(int id) {
         Epic epic = epics.get(id);
-        for ( int subTasksIDs : epic.getSubTasksIDs()) {
+        for (int subTasksIDs : epic.getSubTasksIDs()) {
             subTasks.remove(subTasksIDs);
         }
         epics.remove(id);
@@ -207,8 +207,8 @@ public class InMemoryTaskManager implements TaskManager {
         SubTask subTask = subTasks.get(id);
         Epic epic = epics.get(subTask.getEpicID());
         ArrayList<Integer> subTasksIDs = epic.getSubTasksIDs();
-        for ( int i = 0; i < subTasksIDs.size(); i++) {
-            if (subTasksIDs.get(i) == id ) {
+        for (int i = 0; i < subTasksIDs.size(); i++) {
+            if (subTasksIDs.get(i) == id) {
                 subTasksIDs.remove(i);
                 break;
             }
