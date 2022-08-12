@@ -1,9 +1,11 @@
 package ru.yandex.practicum.tracker.managers;
 
+import ru.yandex.practicum.tracker.tasks.SimpleTask;
+
 import java.util.LinkedList;
 import java.util.List;
 
-public class InMemoryHistoryManager<SimpleTask> implements HistoryManager<SimpleTask> {
+public class InMemoryHistoryManager implements HistoryManager {
     private final int LIST_MAX_SIZE = 10;
     private LinkedList<SimpleTask> historyTasks = new LinkedList<SimpleTask>();
 

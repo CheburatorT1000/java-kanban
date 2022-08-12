@@ -2,12 +2,13 @@ package ru.yandex.practicum.tracker.managers;
 
 
 
+import ru.yandex.practicum.tracker.tasks.SimpleTask;
+
 import java.util.List;
 
 
-public interface HistoryManager<SimpleTask> {
+public interface HistoryManager {
 
-    public void add(SimpleTask task);
-
-    public List<SimpleTask> getHistory();
+     void add(SimpleTask task);
+     List<SimpleTask> getHistory();
 }

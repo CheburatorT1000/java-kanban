@@ -55,9 +55,14 @@ public class InMemoryTaskManager implements TaskManager {
 
     // Получение списка подзадач определенного эпика
     @Override
-    public List<Integer> getSubTasksFromEpic(int id) {
+    public List<SubTask> getSubTasksFromEpic(int id) {
+        ArrayList<SubTask> subTaskList = new ArrayList<>();
+
         Epic epic = epics.get(id);
-        return epic.getSubTasksIDs();
+        for (int subTaskIds : epic.getSubTasksIDs()) {
+            subTaskList.add(subTasks.get(subTaskIds));
+        }
+            return subTaskList;
     }
 
     // Получение списка всех задач
@@ -96,22 +101,14 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllEpicTasks() {
-        for (int epicKey : epics.keySet()) {
-            Epic epicToDelete = epics.get(epicKey);
-            ArrayList<Integer> subTasksIDs = epicToDelete.getSubTasksIDs();
-            for (int subTasksID : subTasksIDs) {
-                subTasks.remove(subTasksID);
-            }
-        }
         epics.clear();
+        subTasks.clear();
     }
 
     @Override
     public void deleteAllSubTasks() {
-        for (int subTasksKey : subTasks.keySet()) {
-            SubTask subTask = subTasks.get(subTasksKey);
-            int epicId = subTask.getEpicID();
-            Epic epic = epics.get(epicId);
+        for ( int epicIds : epics.keySet()) {
+            Epic epic = epics.get(epicIds);
             epic.getSubTasksIDs().clear();
             updateEpicStatus(epic);
         }
