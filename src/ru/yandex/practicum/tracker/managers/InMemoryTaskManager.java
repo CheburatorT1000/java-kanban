@@ -220,13 +220,13 @@ public class InMemoryTaskManager implements TaskManager {
         ArrayList<Integer> subTasksIDs = epic.getSubTasksIDs();
         for (int i = 0; i < subTasksIDs.size(); i++) {
             if (subTasksIDs.get(i) == id) {
-                inMemoryHistoryManager.remove(i);
                 subTasksIDs.remove(i);
                 break;
             }
         }
         epic.setSubTasksIDs(subTasksIDs);
         updateEpicStatus(epic);
+        inMemoryHistoryManager.remove(id);
         subTasks.remove(id);
     }
 }

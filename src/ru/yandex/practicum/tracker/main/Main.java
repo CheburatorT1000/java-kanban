@@ -34,7 +34,7 @@ public class Main {
         inMemoryTaskManager.getEpicTaskByID(1);
         System.out.println(inMemoryTaskManager.getHistory().toString());
 
-        inMemoryTaskManager.deleteEpicByID(2);
+        inMemoryTaskManager.deleteSubTaskByID(5);
         System.out.println(inMemoryTaskManager.getHistory().toString());
     }
 }
