@@ -1,9 +1,10 @@
 package ru.yandex.practicum.tracker.tasks;
 
-import ru.yandex.practicum.tracker.tasks.SimpleTask;
 
 import java.util.ArrayList;
 import java.util.Objects;
+
+import static ru.yandex.practicum.tracker.tasks.TaskType.EPIC;
 
 public class Epic extends SimpleTask {
     private ArrayList<Integer> subTasksIDs;
@@ -11,6 +12,7 @@ public class Epic extends SimpleTask {
     public Epic(int id, String name, String description, Status currentProgress) {
         super(id, name, description, currentProgress);
         subTasksIDs = new ArrayList<>();
+        this.taskType = EPIC;
     }
     public void addSubTask(int subTaskID) {
         this.subTasksIDs.add(subTaskID);
@@ -40,12 +42,10 @@ public class Epic extends SimpleTask {
 
     @Override
     public String toString() {
-        return '\n' + "Epic{" +
-                "subTasksIDs=" + subTasksIDs +
-                ", id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", currentProgress=" + currentProgress +
-                '}';
+        return "" + id
+                + ',' + taskType
+                + ',' + name
+                + ',' + currentProgress
+                + ',' + description;
     }
 }

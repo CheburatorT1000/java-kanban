@@ -2,12 +2,15 @@ package ru.yandex.practicum.tracker.tasks;
 
 import java.util.Objects;
 
+import static ru.yandex.practicum.tracker.tasks.TaskType.SUB_TASK;
+
 public class SubTask extends SimpleTask {
     private int epicID;
 
     public SubTask(int id, String name, String description, Status currentProgress, int epicID) {
         super(id, name, description, currentProgress);
         this.epicID = epicID;
+        this.taskType = SUB_TASK;
     }
 
     public int getEpicID() {
@@ -34,12 +37,11 @@ public class SubTask extends SimpleTask {
 
     @Override
     public String toString() {
-        return '\n' + "SubTask{" +
-                "epicID=" + epicID +
-                ", id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", currentProgress=" + currentProgress +
-                '}';
+        return "" + id
+                + ',' + taskType
+                + ',' + name
+                + ',' + currentProgress
+                + ',' + description
+                + ',' + epicID;
     }
 }

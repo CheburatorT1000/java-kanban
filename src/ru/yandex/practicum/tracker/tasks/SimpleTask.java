@@ -1,17 +1,22 @@
 package ru.yandex.practicum.tracker.tasks;
 
 import java.util.Objects;
+
+import static ru.yandex.practicum.tracker.tasks.TaskType.SIMPLE_TASK;
+
 public class SimpleTask {
     protected int id;
     protected String name;
     protected String description;
     protected Status currentProgress;
+    protected TaskType taskType;
 
     public SimpleTask(int id, String name, String description, Status currentProgress) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.currentProgress = currentProgress;
+        this.taskType = SIMPLE_TASK;
     }
 
     public int getId() {
@@ -46,6 +51,10 @@ public class SimpleTask {
         this.currentProgress = status;
     }
 
+    public TaskType getTaskType() {
+        return taskType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,11 +72,10 @@ public class SimpleTask {
 
     @Override
     public String toString() {
-        return '\n' + "SimpleTask{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", currentProgress=" + currentProgress +
-                '}';
+        return "" + id
+                + ',' + taskType
+                + ',' + name
+                + ',' + currentProgress
+                + ',' + description;
     }
 }

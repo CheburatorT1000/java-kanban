@@ -16,7 +16,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void remove(int id) {
-        customLinkedList.removeNode(id);
+        customLinkedList.removeNode(customLinkedList.indexer.get(id));
     }
 
     @Override
@@ -28,7 +28,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     private class CustomLinkedList {
         public Node first;
         public Node last;
-        private HashMap<Integer, Node> indexer = new HashMap<>();
+        private final HashMap<Integer, Node> indexer = new HashMap<>();
 
         List<SimpleTask> getTasks() {
             List<SimpleTask> nodesItems = new ArrayList<>();
@@ -41,8 +41,9 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
 
         void linkLast(SimpleTask task) {
-            removeNode(task.getId());
-            indexer.remove(task.getId());
+            if (indexer.containsKey(task.getId())) {
+                remove(task.getId());
+            }
             Node prev = null;
 
             if (last != null)
@@ -58,24 +59,32 @@ public class InMemoryHistoryManager implements HistoryManager {
             indexer.put(task.getId(), newNode);
         }
 
-        void removeNode(int indx) {
-            if (indexer.containsKey(indx)) {
-                Node currentNode = indexer.get(indx);
+        void removeNode(Node currentNode) {
+            if (currentNode != null) {
                 Node prev = currentNode.getPrev();
                 Node next = currentNode.getNext();
 
                 if (prev == null) {
-                    currentNode.getNext().setPrev(null);
+                    if (next != null) {
+                        next.setPrev(null);
+                    }
                     first = next;
                 } else
-                    currentNode.getPrev().setNext(currentNode.getNext());
+                    if (prev != null) {
+                        prev.setNext(next);
+                    }
 
                 if (next == null) {
-                    currentNode.getPrev().setNext(null);
+                    if (prev != null) {
+                        prev.setNext(null);
+                    }
                     last = prev;
-                } else
-                    currentNode.getNext().setPrev(currentNode.getPrev());
-                indexer.remove(indx);
+                } else {
+                    if (next != null) {
+                        next.setPrev(prev);
+                    }
+                }
+                indexer.remove(currentNode.getItem().getId());
             }
         }
     }

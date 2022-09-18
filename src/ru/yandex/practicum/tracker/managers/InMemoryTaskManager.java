@@ -13,11 +13,11 @@ import static ru.yandex.practicum.tracker.tasks.Status.*;
 public class InMemoryTaskManager implements TaskManager {
 
 
-    private HistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
-    private int nextID = 0;
-    private final HashMap<Integer, SimpleTask> simpleTasks = new HashMap<>();
-    private final HashMap<Integer, Epic> epics = new HashMap<>();
-    private final HashMap<Integer, SubTask> subTasks = new HashMap<>();
+    protected HistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
+    protected int nextID = 0;
+    protected final HashMap<Integer, SimpleTask> simpleTasks = new HashMap<>();
+    protected final HashMap<Integer, Epic> epics = new HashMap<>();
+    protected final HashMap<Integer, SubTask> subTasks = new HashMap<>();
 
 
     private int makeID() {
@@ -25,7 +25,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     // метод для определения статуса эпика
-    private void updateEpicStatus(Epic epic) {
+    protected void updateEpicStatus(Epic epic) {
         int epicStatusCount = 0;
         for (int subTasksIdNum : epic.getSubTasksIDs()) {
             SubTask subTask = subTasks.get(subTasksIdNum);
