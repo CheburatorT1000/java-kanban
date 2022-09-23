@@ -17,7 +17,8 @@ public class Main {
     public static void main(String[] args) {
         File file = new File("src/ru/yandex/practicum/tracker/resources/save.csv");
         FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile(file);
-        //fileBackedTasksManager.addSimpleTask(new SimpleTask(0, "мега задача", "СУПЕРПУПЕР1!", NEW));
+        fileBackedTasksManager.addSimpleTask(new SimpleTask(0, "мега задача", "СУПЕРПУПЕР1!", NEW));
+        fileBackedTasksManager.getSimpleTaskByID(78);
         System.out.println(fileBackedTasksManager.getHistory().toString());
 
         /*
