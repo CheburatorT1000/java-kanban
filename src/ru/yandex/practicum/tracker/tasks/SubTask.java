@@ -1,5 +1,6 @@
 package ru.yandex.practicum.tracker.tasks;
 
+import java.time.Instant;
 import java.util.Objects;
 
 import static ru.yandex.practicum.tracker.tasks.TaskType.SUB_TASK;
@@ -7,8 +8,14 @@ import static ru.yandex.practicum.tracker.tasks.TaskType.SUB_TASK;
 public class SubTask extends SimpleTask {
     private int epicID;
 
-    public SubTask(int id, String name, String description, Status currentProgress, int epicID) {
-        super(id, name, description, currentProgress);
+    public SubTask(int id,
+                   String name,
+                   String description,
+                   Status currentProgress,
+                   Instant startTime,
+                   long duration,
+                   int epicID) {
+        super(id, name, description, currentProgress, startTime, duration);
         this.epicID = epicID;
         this.taskType = SUB_TASK;
     }
@@ -42,6 +49,8 @@ public class SubTask extends SimpleTask {
                 + ',' + name
                 + ',' + currentProgress
                 + ',' + description
+                + ',' + startTime
+                + ',' + duration
                 + ',' + epicID;
     }
 }

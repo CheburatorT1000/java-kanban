@@ -6,6 +6,7 @@ import ru.yandex.practicum.tracker.tasks.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,8 +41,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                             SubTask subTask = (SubTask) task;
                             Epic epicFromSubtask = newFileBackedTasksManager.epics.get(subTask.getEpicID());
                             epicFromSubtask.addSubTask(subTask.getEpicID());
-                            newFileBackedTasksManager.updateEpicStatus(epicFromSubtask);
                             newFileBackedTasksManager.subTasks.put(subTask.getId(),subTask);
+                            newFileBackedTasksManager.updateEpicStatus(epicFromSubtask);
                             break;
                     }
                 } else {
@@ -70,7 +71,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public void save() {
         // читаем по всем мапам
         try (Writer fileWriter = new FileWriter(file)) {
-            fileWriter.write("id,type,name,status,description,epic\n");
+            fileWriter.write("id,type,name,status,description,startTime,duration,epic\n");
             for (int ids : simpleTasks.keySet()) {
                 fileWriter.write(simpleTasks.get(ids).toString() + '\n');
             }
@@ -95,18 +96,20 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         String name = parts[2];
         Status status = Status.valueOf(parts[3]);
         String description = parts[4];
+        Instant startTime = Instant.parse(parts[5]);
+        long duration = Long.parseLong(parts[6]);
         SimpleTask task = null;
 
         switch (taskType) {
             case SIMPLE_TASK:
-                task = new SimpleTask(id, name, description, status);
+                task = new SimpleTask(id, name, description, status, startTime, duration);
                 break;
             case EPIC:
-                task = new Epic(id, name, description, status);
+                task = new Epic(id, name, description, status, startTime, duration);
                 break;
             case SUB_TASK:
-                int epicId = Integer.parseInt(parts[5]);
-                task = new SubTask(id, name, description, status, epicId);
+                int epicId = Integer.parseInt(parts[7]);
+                task = new SubTask(id, name, description, status, startTime, duration, epicId);
                 break;
         }
         return task;

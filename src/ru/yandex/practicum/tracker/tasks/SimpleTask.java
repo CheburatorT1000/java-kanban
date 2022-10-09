@@ -1,5 +1,7 @@
 package ru.yandex.practicum.tracker.tasks;
 
+
+import java.time.Instant;
 import java.util.Objects;
 
 import static ru.yandex.practicum.tracker.tasks.TaskType.SIMPLE_TASK;
@@ -10,13 +12,43 @@ public class SimpleTask {
     protected String description;
     protected Status currentProgress;
     protected TaskType taskType;
+    protected Instant startTime;
+    protected long duration;
 
-    public SimpleTask(int id, String name, String description, Status currentProgress) {
+    public SimpleTask(int id,
+                      String name,
+                      String description,
+                      Status currentProgress,
+                      Instant startTime,
+                      long duration) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.currentProgress = currentProgress;
         this.taskType = SIMPLE_TASK;
+        this.startTime = startTime;
+        this.duration = duration;
+    }
+
+    public Instant getStartTime() {
+        return startTime;
+    }
+
+    public Instant getEndTime() {
+        final byte SECONDS_IN_ONE_MINUTE = 60;
+        return startTime.plusSeconds(duration * SECONDS_IN_ONE_MINUTE);
+    }
+
+    public void setCurrentProgress(Status currentProgress) {
+        this.currentProgress = currentProgress;
+    }
+
+    public void setStartTime(Instant startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
     public int getId() {
@@ -76,6 +108,8 @@ public class SimpleTask {
                 + ',' + taskType
                 + ',' + name
                 + ',' + currentProgress
-                + ',' + description;
+                + ',' + description
+                + ',' + startTime
+                + ',' + duration;
     }
 }

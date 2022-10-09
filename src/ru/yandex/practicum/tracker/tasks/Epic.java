@@ -1,6 +1,7 @@
 package ru.yandex.practicum.tracker.tasks;
 
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -8,14 +9,19 @@ import static ru.yandex.practicum.tracker.tasks.TaskType.EPIC;
 
 public class Epic extends SimpleTask {
     private ArrayList<Integer> subTasksIDs;
+    private Instant endTime;
 
-    public Epic(int id, String name, String description, Status currentProgress) {
-        super(id, name, description, currentProgress);
+    public Epic(int id, String name, String description, Status currentProgress, Instant startTime, long duration) {
+        super(id, name, description, currentProgress, startTime, duration);
         subTasksIDs = new ArrayList<>();
         this.taskType = EPIC;
     }
     public void addSubTask(int subTaskID) {
         this.subTasksIDs.add(subTaskID);
+    }
+    public void setDuration() {
+        final byte SECONDS_IN_ONE_MINUTE = 60;
+        duration = (getEndTime().getEpochSecond() - getStartTime().getEpochSecond()) / SECONDS_IN_ONE_MINUTE;
     }
 
     public ArrayList<Integer> getSubTasksIDs() {
@@ -24,6 +30,15 @@ public class Epic extends SimpleTask {
 
     public void setSubTasksIDs(ArrayList<Integer> subTasksIDs) {
         this.subTasksIDs = subTasksIDs;
+    }
+
+    @Override
+    public Instant getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Instant endTime) {
+        this.endTime = endTime;
     }
 
     @Override
@@ -46,6 +61,8 @@ public class Epic extends SimpleTask {
                 + ',' + taskType
                 + ',' + name
                 + ',' + currentProgress
-                + ',' + description;
+                + ',' + description
+                + ',' + startTime
+                + ',' + duration;
     }
 }

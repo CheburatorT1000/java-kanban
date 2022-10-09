@@ -1,19 +1,6 @@
 id,type,name,status,description,epic
-1,SIMPLE_TASK,мега задача,NEW,СУПЕРПУПЕР1!
-2,SIMPLE_TASK,мега задача,NEW,СУПЕРПУПЕР1!
-3,SIMPLE_TASK,мега задача,NEW,СУПЕРПУПЕР1!
-4,SIMPLE_TASK,мега задача,NEW,СУПЕРПУПЕР1!
-78,SIMPLE_TASK,мега задача,NEW,СУПЕРПУПЕР1!
-79,SIMPLE_TASK,мега задача,NEW,СУПЕРПУПЕР1!
-80,SIMPLE_TASK,мега задача,NEW,СУПЕРПУПЕР1!
-81,SIMPLE_TASK,мега задача,NEW,СУПЕРПУПЕР1!
-82,SIMPLE_TASK,мега задача,NEW,СУПЕРПУПЕР1!
-83,SIMPLE_TASK,мега задача,NEW,СУПЕРПУПЕР1!
-84,SIMPLE_TASK,мега задача,NEW,СУПЕРПУПЕР1!
-85,SIMPLE_TASK,мега задача,NEW,СУПЕРПУПЕР1!
-86,SIMPLE_TASK,мега задача,NEW,СУПЕРПУПЕР1!
-87,SIMPLE_TASK,мега задача,NEW,СУПЕРПУПЕР1!
-88,SIMPLE_TASK,мега задача,NEW,СУПЕРПУПЕР1!
-89,SIMPLE_TASK,мега задача,NEW,СУПЕРПУПЕР1!
+1,EPIC,ИмяЭпика,IN_PROGRESS,ОписаниеЗадачи
+2,SUB_TASK,ИмяСабТаска,NEW,ОписаниеСабТаска,1
+3,SUB_TASK,ИмяСабТаска,NEW,ОписаниеСабТаска,1
+4,SUB_TASK,ИмяСабТаска,DONE,ОписаниеСабТаска,1
 
-78,
