@@ -24,7 +24,8 @@ public class InMemoryTaskManager implements TaskManager, Comparator<SimpleTask> 
         return ++nextID;
     }
 
-    private List<SimpleTask> getPrioritizedTasks() {
+    @Override
+    public List<SimpleTask> getPrioritizedTasks() {
         return new ArrayList<>(prioritizedTasks);
     }
 
@@ -39,15 +40,17 @@ public class InMemoryTaskManager implements TaskManager, Comparator<SimpleTask> 
         }
     }
 
-    private void addToPrioritizedTasks(SimpleTask task) {
-        prioritizedTasks.add(task);
+    protected void addToPrioritizedTasks(SimpleTask task) {
         checkTimeCrossing();
+        prioritizedTasks.add(task);
     }
 
 
     // метод для определения статуса эпика
     protected void updateEpicStatus(Epic epic) {
         int epicStatusCount = 0;
+        long duration = 0;
+        final byte SECONDS_IN_ONE_MINUTE = 60;
         for (int subTasksIdNum : epic.getSubTasksIDs()) {
             if (subTasks.containsKey(subTasksIdNum)) {
                 SubTask subTask = subTasks.get(subTasksIdNum);
@@ -58,7 +61,8 @@ public class InMemoryTaskManager implements TaskManager, Comparator<SimpleTask> 
                     epic.setEndTime(subTask.getEndTime());
                 else if (epic.getEndTime() == null)
                     epic.setEndTime(subTask.getEndTime());
-                epic.setDuration();
+
+                duration += subTask.getDuration();
 
                 switch (subTask.getStatus()) {
                     case IN_PROGRESS: {
@@ -72,6 +76,7 @@ public class InMemoryTaskManager implements TaskManager, Comparator<SimpleTask> 
                 }
             }
         }
+        epic.setDuration(duration / SECONDS_IN_ONE_MINUTE);
         if (epic.getSubTasksIDs().isEmpty() || epicStatusCount == 0)
             epic.setStatus(NEW);
         else if (epicStatusCount / epic.getSubTasksIDs().size() == 2)
@@ -228,7 +233,8 @@ public class InMemoryTaskManager implements TaskManager, Comparator<SimpleTask> 
     public void updateSimpleTask(SimpleTask simpleTask) {
         if (simpleTasks.containsKey(simpleTask.getId())) {
             simpleTasks.put(simpleTask.getId(), simpleTask);
-            addToPrioritizedTasks(simpleTask);
+            prioritizedTasks.removeIf(t -> t.getId() == simpleTask.getId());
+             addToPrioritizedTasks(simpleTask);
         }
     }
 
@@ -238,6 +244,7 @@ public class InMemoryTaskManager implements TaskManager, Comparator<SimpleTask> 
             Epic epicOriginal = epics.get(epic.getId());
             epicOriginal.setName(epic.getName());
             epicOriginal.setDescription(epic.getDescription());
+            prioritizedTasks.removeIf(t -> t.getId() == epicOriginal.getId());
             addToPrioritizedTasks(epic);
         }
     }
@@ -248,6 +255,7 @@ public class InMemoryTaskManager implements TaskManager, Comparator<SimpleTask> 
             subTasks.put(subTask.getId(), subTask);
             Epic epic = epics.get(subTask.getEpicID());
             updateEpicStatus(epic);
+            prioritizedTasks.removeIf(t -> t.getId() == subTask.getId());
             addToPrioritizedTasks(subTask);
         }
     }

@@ -32,10 +32,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     switch (task.getTaskType()) {
                         case SIMPLE_TASK:
                             newFileBackedTasksManager.simpleTasks.put(task.getId(), task);
+                            newFileBackedTasksManager.addToPrioritizedTasks(task);
                             break;
                         case EPIC:
                             Epic epic = (Epic) task;
                             newFileBackedTasksManager.epics.put(epic.getId(), epic);
+                            newFileBackedTasksManager.addToPrioritizedTasks(epic);
                             break;
                         case SUB_TASK:
                             SubTask subTask = (SubTask) task;
@@ -43,6 +45,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                             epicFromSubtask.addSubTask(subTask.getEpicID());
                             newFileBackedTasksManager.subTasks.put(subTask.getId(),subTask);
                             newFileBackedTasksManager.updateEpicStatus(epicFromSubtask);
+                            newFileBackedTasksManager.addToPrioritizedTasks(subTask);
                             break;
                     }
                 } else {
@@ -115,7 +118,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return task;
     }
 
-    static String historyToString(HistoryManager manager) {
+    public static String historyToString(HistoryManager manager) {
         StringBuilder stringHistory = new StringBuilder();
         for (SimpleTask task : manager.getHistory()) {
             stringHistory.append(task.getId()).append(",");
@@ -123,7 +126,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return stringHistory.toString();
     }
 
-    static List<Integer> historyFromString(String value) {
+    public static List<Integer> historyFromString(String value) {
         List<Integer> historyIds = new ArrayList<>();
         String[] parts = value.split(",");
         for (String part : parts) {

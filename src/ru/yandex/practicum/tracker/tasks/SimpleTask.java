@@ -34,6 +34,14 @@ public class SimpleTask {
         return startTime;
     }
 
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
     public Instant getEndTime() {
         final byte SECONDS_IN_ONE_MINUTE = 60;
         return startTime.plusSeconds(duration * SECONDS_IN_ONE_MINUTE);

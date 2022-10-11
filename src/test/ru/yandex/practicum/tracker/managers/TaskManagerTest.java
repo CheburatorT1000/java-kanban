@@ -115,6 +115,14 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(managerForTest.getSimpleTaskByID(1), simpleTask2);
         assertNull(managerForTest.getSimpleTaskByID(4));
     }
+    @Test
+    void shouldGetSimpleTaskByIDNegative() {
+        SimpleTask simpleTask1 = new SimpleTask(0, "ИмяЗадачи", "ОписаниеЗадачи", NEW, Instant.EPOCH, 0);
+        SimpleTask simpleTask2 = new SimpleTask(1, "ИмяЗадачи", "ОписаниеЗадачи", NEW, Instant.EPOCH, 0);
+        managerForTest.addSimpleTask(simpleTask1);
+
+        assertNull(managerForTest.getSimpleTaskByID(4));
+    }
 
     @Test
     void shouldGetEpicTaskByID() {
@@ -122,6 +130,15 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Epic epic2 = new Epic(1, "ИмяЭпика", "ОписаниеЗадачи", NEW, Instant.EPOCH, 0);
         managerForTest.addEpicTask(epic1);
         assertEquals(epic2, managerForTest.getEpicTaskByID(1));
+        assertNull(managerForTest.getEpicTaskByID(6));
+    }
+
+ @Test
+    void shouldGetEpicTaskByIDNegative() {
+        Epic epic1 = new Epic(0, "ИмяЭпика", "ОписаниеЗадачи", NEW, Instant.EPOCH, 0);
+        Epic epic2 = new Epic(1, "ИмяЭпика", "ОписаниеЗадачи", NEW, Instant.EPOCH, 0);
+        managerForTest.addEpicTask(epic1);
+
         assertNull(managerForTest.getEpicTaskByID(6));
     }
 
@@ -133,6 +150,17 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         managerForTest.addEpicTask(epic1);
         managerForTest.addSubTask(subTask1);
         assertEquals(subTask2, managerForTest.getSubTaskByID(2));
+        assertNull(managerForTest.getSubTaskByID(6));
+    }
+
+    @Test
+    void shouldGetSubTaskByIDNegative() {
+        Epic epic1 = new Epic(0, "ИмяЭпика", "ОписаниеЗадачи", NEW, Instant.EPOCH, 0);
+        SubTask subTask1 = new SubTask(0, "ИмяСабТаска", "ОписаниеСабТаска", Status.IN_PROGRESS, Instant.EPOCH, 0, 1);
+        SubTask subTask2 = new SubTask(2, "ИмяСабТаска", "ОписаниеСабТаска", Status.IN_PROGRESS, Instant.EPOCH, 0, 1);
+        managerForTest.addEpicTask(epic1);
+        managerForTest.addSubTask(subTask1);
+
         assertNull(managerForTest.getSubTaskByID(6));
     }
 

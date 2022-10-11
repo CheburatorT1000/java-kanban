@@ -16,12 +16,9 @@ public class Epic extends SimpleTask {
         subTasksIDs = new ArrayList<>();
         this.taskType = EPIC;
     }
+
     public void addSubTask(int subTaskID) {
         this.subTasksIDs.add(subTaskID);
-    }
-    public void setDuration() {
-        final byte SECONDS_IN_ONE_MINUTE = 60;
-        duration = (getEndTime().getEpochSecond() - getStartTime().getEpochSecond()) / SECONDS_IN_ONE_MINUTE;
     }
 
     public ArrayList<Integer> getSubTasksIDs() {

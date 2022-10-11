@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
     private File file = new File("src/test/testFile.csv");
+
     @Override
     protected FileBackedTasksManager createManager() {
         return new FileBackedTasksManager(file);
@@ -25,14 +26,33 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
     }
 
     @Test
-    void shouldLoadFromFile() {
+    void shouldLoadFromEmptyFile() {
+        Epic epic1 = new Epic(1, "name", "description", Status.NEW, Instant.EPOCH, 0);
+        managerForTest.addEpicTask(epic1);
+        managerForTest.deleteAllEpicTasks();
+        FileBackedTasksManager tempForTest = FileBackedTasksManager.loadFromFile(file);
+        assertEquals(0, tempForTest.getAllEpicTasks().size());
+    }
+
+    @Test
+    void shouldLoadFromFileEpicWithEmptySubtasks() {
+        Epic epic1 = new Epic(1, "name", "description", Status.NEW, Instant.EPOCH, 0);
+        SubTask subTask1 = new SubTask(2, "name", "description", Status.NEW, Instant.now(), 0, 1);
+        managerForTest.addEpicTask(epic1);
+        managerForTest.addSubTask(subTask1);
+        managerForTest.deleteAllSubTasks();
+        FileBackedTasksManager tempForTest = FileBackedTasksManager.loadFromFile(file);
+        assertEquals(1, tempForTest.getAllEpicTasks().size());
+    }
+
+    @Test
+    void shouldLoadFromFileWithEmptyHistory() {
         Epic epic1 = new Epic(1, "name", "description", Status.NEW, Instant.EPOCH, 0);
         SubTask subTask1 = new SubTask(2, "name", "description", Status.NEW, Instant.now(), 0, 1);
         managerForTest.addEpicTask(epic1);
         managerForTest.addSubTask(subTask1);
         FileBackedTasksManager tempForTest = FileBackedTasksManager.loadFromFile(file);
         assertEquals(1, tempForTest.getAllEpicTasks().size());
-        assertEquals(subTask1, tempForTest.getSubTaskByID(2));
     }
 
     @Test
@@ -41,12 +61,4 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
 
         assertThrows(ManagerSaveException.class, () -> FileBackedTasksManager.loadFromFile(badFile));
     }
-/*
-    public static FileBackedTasksManager loadFromFile(File file)
-    public void save()
-    public static SimpleTask fromString(String value)
-    static String historyToString(HistoryManager manager)
-    static List<Integer> historyFromString(String value)
-
- */
 }

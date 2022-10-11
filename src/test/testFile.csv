@@ -1,5 +1,4 @@
 id,type,name,status,description,startTime,duration,epic
-1,EPIC,name,NEW,description,1970-01-01T00:00:00Z,27755569
-2,SUB_TASK,name,NEW,description,2022-10-09T16:49:10.708060400Z,0,1
+1,EPIC,name,NEW,description,1970-01-01T00:00:00Z,0
+2,SUB_TASK,name,NEW,description,2022-10-11T22:45:34.504644900Z,0,1
 
-2,

@@ -5,6 +5,8 @@ import ru.yandex.practicum.tracker.tasks.*;
 import java.util.List;
 
 public interface TaskManager {
+
+    List<SimpleTask> getPrioritizedTasks();
     List<SubTask> getSubTasksFromEpic(int id);
 
     List<SimpleTask> getAllSimpleTasks();
