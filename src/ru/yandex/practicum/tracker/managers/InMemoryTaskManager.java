@@ -29,20 +29,22 @@ public class InMemoryTaskManager implements TaskManager, Comparator<SimpleTask> 
         return new ArrayList<>(prioritizedTasks);
     }
 
-    private void checkTimeCrossing() {
-         List<SimpleTask> tempTasks = getPrioritizedTasks();
+    private void checkTimeCrossing(SimpleTask task) {
+        List<SimpleTask> tempTasks = getPrioritizedTasks();
         for (int i = 1; i < tempTasks.size(); i++) {
-            if (tempTasks.get(i).getStartTime().isBefore(tempTasks.get(i-1).getEndTime()))
+            if (tempTasks.get(i).getStartTime().isBefore(tempTasks.get(i-1).getEndTime())) {
+                prioritizedTasks.removeIf(t -> t.getId() == task.getId());
                 throw new TimeCrossingException("Найдено пересечение между "
                         + tempTasks.get(i).toString()
                         + " и "
                         + tempTasks.get(i - 1).toString());
+            }
         }
     }
 
     protected void addToPrioritizedTasks(SimpleTask task) {
-        checkTimeCrossing();
         prioritizedTasks.add(task);
+        checkTimeCrossing(task);
     }
 
 
