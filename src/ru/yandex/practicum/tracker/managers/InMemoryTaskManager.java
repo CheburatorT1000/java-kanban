@@ -52,16 +52,20 @@ public class InMemoryTaskManager implements TaskManager, Comparator<SimpleTask> 
     protected void updateEpicStatus(Epic epic) {
         int epicStatusCount = 0;
         long duration = 0;
-        final byte SECONDS_IN_ONE_MINUTE = 60;
         for (int subTasksIdNum : epic.getSubTasksIDs()) {
             if (subTasks.containsKey(subTasksIdNum)) {
                 SubTask subTask = subTasks.get(subTasksIdNum);
 
+                if (epic.getStartTime() == null)
+                    epic.setStartTime(subTask.getStartTime());
+
+                if (epic.getEndTime() == null)
+                    epic.setEndTime(subTask.getEndTime());
+
                 if (subTask.getStartTime().isBefore(epic.getStartTime()))
                     epic.setStartTime(subTask.getStartTime());
-                if (epic.getEndTime() != null && subTask.getStartTime().isAfter(epic.getEndTime()))
-                    epic.setEndTime(subTask.getEndTime());
-                else if (epic.getEndTime() == null)
+
+                if (subTask.getEndTime().isAfter(epic.getEndTime()))
                     epic.setEndTime(subTask.getEndTime());
 
                 duration += subTask.getDuration();
@@ -78,7 +82,7 @@ public class InMemoryTaskManager implements TaskManager, Comparator<SimpleTask> 
                 }
             }
         }
-        epic.setDuration(duration / SECONDS_IN_ONE_MINUTE);
+        epic.setDuration(duration);
         if (epic.getSubTasksIDs().isEmpty() || epicStatusCount == 0)
             epic.setStatus(NEW);
         else if (epicStatusCount / epic.getSubTasksIDs().size() == 2)
@@ -279,8 +283,8 @@ public class InMemoryTaskManager implements TaskManager, Comparator<SimpleTask> 
             inMemoryHistoryManager.remove(subTasksIDs);
         }
         inMemoryHistoryManager.remove(id);
-        prioritizedTasks.removeIf(t -> t.getId() == id);
         epics.remove(id);
+        prioritizedTasks.removeIf(t -> t.getId() == id);
     }
 
     @Override
@@ -297,8 +301,8 @@ public class InMemoryTaskManager implements TaskManager, Comparator<SimpleTask> 
         epic.setSubTasksIDs(subTasksIDs);
         updateEpicStatus(epic);
         inMemoryHistoryManager.remove(id);
-        prioritizedTasks.removeIf(t -> t.getId() == id);
         subTasks.remove(id);
+        prioritizedTasks.removeIf(t -> t.getId() == id);
     }
 
     @Override

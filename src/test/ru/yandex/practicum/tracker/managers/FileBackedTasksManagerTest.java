@@ -35,27 +35,6 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
     }
 
     @Test
-    void shouldLoadFromFileEpicWithEmptySubtasks() {
-        Epic epic1 = new Epic(1, "name", "description", Status.NEW, Instant.EPOCH, 0);
-        SubTask subTask1 = new SubTask(2, "name", "description", Status.NEW, Instant.now(), 0, 1);
-        managerForTest.addEpicTask(epic1);
-        managerForTest.addSubTask(subTask1);
-        managerForTest.deleteAllSubTasks();
-        FileBackedTasksManager tempForTest = FileBackedTasksManager.loadFromFile(file);
-        assertEquals(1, tempForTest.getAllEpicTasks().size());
-    }
-
-    @Test
-    void shouldLoadFromFileWithEmptyHistory() {
-        Epic epic1 = new Epic(1, "name", "description", Status.NEW, Instant.EPOCH, 0);
-        SubTask subTask1 = new SubTask(2, "name", "description", Status.NEW, Instant.now(), 0, 1);
-        managerForTest.addEpicTask(epic1);
-        managerForTest.addSubTask(subTask1);
-        FileBackedTasksManager tempForTest = FileBackedTasksManager.loadFromFile(file);
-        assertEquals(1, tempForTest.getAllEpicTasks().size());
-    }
-
-    @Test
     public void throwManagerSaveExceptionTest() {
         File badFile = new File("Ба-дум-тсс!");
 

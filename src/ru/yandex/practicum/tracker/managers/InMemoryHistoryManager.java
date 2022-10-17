@@ -70,20 +70,17 @@ public class InMemoryHistoryManager implements HistoryManager {
                     }
                     first = next;
                 } else
-                    if (prev != null) {
-                        prev.setNext(next);
-                    }
+                    prev.setNext(next);
+
 
                 if (next == null) {
                     if (prev != null) {
                         prev.setNext(null);
                     }
                     last = prev;
-                } else {
-                    if (next != null) {
-                        next.setPrev(prev);
-                    }
-                }
+                } else
+                    next.setPrev(prev);
+
                 indexer.remove(currentNode.getItem().getId());
             }
         }

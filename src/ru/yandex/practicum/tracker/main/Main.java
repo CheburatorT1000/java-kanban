@@ -1,26 +1,27 @@
 package ru.yandex.practicum.tracker.main;
 
+import com.google.gson.Gson;
+import ru.yandex.practicum.tracker.HTTP.HttpTaskServer;
+import ru.yandex.practicum.tracker.HTTP.KVServer;
+import ru.yandex.practicum.tracker.exceptions.ManagerSaveException;
 import ru.yandex.practicum.tracker.managers.FileBackedTasksManager;
+import ru.yandex.practicum.tracker.managers.HTTPTaskManager;
 import ru.yandex.practicum.tracker.managers.Managers;
-import ru.yandex.practicum.tracker.managers.TaskManager;
-import ru.yandex.practicum.tracker.tasks.Epic;
 import ru.yandex.practicum.tracker.tasks.SimpleTask;
-import ru.yandex.practicum.tracker.tasks.SubTask;
+import ru.yandex.practicum.tracker.tasks.Status;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.Instant;
-
-import static ru.yandex.practicum.tracker.tasks.Status.*;
 
 public class Main {
 
-    public static void main(String[] args) {
-        File file = new File("src/ru/yandex/practicum/tracker/resources/save.csv");
-        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
-        fileBackedTasksManager.addEpicTask(new Epic(0, "мега задача", "123!", NEW, Instant.now(), 0));
-        fileBackedTasksManager.addSubTask(new SubTask(0, "мега задача", "123!", NEW, Instant.EPOCH,40,1));
-        fileBackedTasksManager.getEpicTaskByID(1);
-        System.out.println(fileBackedTasksManager.getHistory().toString());
+    public static void main(String[] args) throws IOException {
     }
 }

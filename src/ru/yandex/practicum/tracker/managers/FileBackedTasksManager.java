@@ -11,10 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
-    private final File file;
+    protected final File file;
 
     public FileBackedTasksManager(File file) {
-        this.file = file;
+        if(file != null)
+            this.file = file;
+        else
+            this.file = new File("src/ru/yandex/practicum/tracker/resources/save.csv");
     }
 
     public static FileBackedTasksManager loadFromFile(File file) {
@@ -72,7 +75,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return newFileBackedTasksManager;
     }
     public void save() {
-        // читаем по всем мапам
         try (Writer fileWriter = new FileWriter(file)) {
             fileWriter.write("id,type,name,status,description,startTime,duration,epic\n");
             for (int ids : simpleTasks.keySet()) {
