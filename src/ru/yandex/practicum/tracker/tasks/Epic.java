@@ -18,7 +18,8 @@ public class Epic extends SimpleTask {
     }
 
     public void addSubTask(int subTaskID) {
-        this.subTasksIDs.add(subTaskID);
+        if (!subTasksIDs.contains(subTaskID))
+            this.subTasksIDs.add(subTaskID);
     }
 
     public ArrayList<Integer> getSubTasksIDs() {

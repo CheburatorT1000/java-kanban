@@ -1,4 +1,4 @@
-package ru.yandex.practicum.tracker.HTTP;
+package ru.yandex.practicum.tracker.http;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -62,8 +62,11 @@ public class KVServer {
             String st = data.get(key);
             httpExchange.getResponseHeaders().add("Content-Type", "application/json");
             System.out.println("Значение " + data.get(key) + " успешно передано!");
-            httpExchange.sendResponseHeaders(200, 0);
-            httpExchange.getResponseBody().write(st.getBytes());
+            sendText(httpExchange, st);
+            //httpExchange.sendResponseHeaders(200, 0);
+            //httpExchange.getResponseBody().write(st.getBytes());
+        } else {
+            httpExchange.sendResponseHeaders(404, 0);
         }
     }
 

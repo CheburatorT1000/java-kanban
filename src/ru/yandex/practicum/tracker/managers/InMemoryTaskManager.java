@@ -19,6 +19,9 @@ public class InMemoryTaskManager implements TaskManager, Comparator<SimpleTask> 
     protected final HashMap<Integer, SubTask> subTasks = new HashMap<>();
     protected final TreeSet<SimpleTask> prioritizedTasks = new TreeSet<>(this);
 
+    public void setNextID(int nextID) {
+        this.nextID = nextID;
+    }
 
     private int makeID() {
         return ++nextID;

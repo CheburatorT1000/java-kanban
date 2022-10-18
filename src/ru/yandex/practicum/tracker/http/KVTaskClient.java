@@ -1,4 +1,4 @@
-package ru.yandex.practicum.tracker.HTTP;
+package ru.yandex.practicum.tracker.http;
 
 import com.google.gson.Gson;
 
@@ -18,10 +18,14 @@ public class KVTaskClient {
     public KVTaskClient(URI receivedUri) {
         gson = new Gson();
         this.receivedUri = receivedUri;
-        registration();
+        try {
+            registration();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private void registration() {
+    private void registration() throws IOException {
         httpClient = HttpClient.newHttpClient();
         URI registerUrl = URI.create(receivedUri + "/register");
         HttpRequest request = HttpRequest.newBuilder()
@@ -34,14 +38,14 @@ public class KVTaskClient {
                 apiToken = httpResponse.body();
                 System.out.println("KVClient Token " + apiToken);
             } else {
-                System.out.println("Error. Server returned a status code " + httpResponse.statusCode());
+                throw new IOException("Не правильный код запроса!");
             }
         } catch (IOException | InterruptedException e) {
-            System.out.println("Request error!");
+            throw new IOException("Не правильный код запроса!");
         }
     }
 
-    public void put(String key, String json) {
+    public void put(String key, String json) throws IOException {
         URI putUrl = URI.create(receivedUri + "/save/" + key + "?API_TOKEN=" + apiToken);
         System.out.println(putUrl);
         String value = gson.toJson(json);
@@ -55,15 +59,15 @@ public class KVTaskClient {
             if (httpResponse.statusCode() == 200) {
                 System.out.println("\n Data was successfully transferred and saved!");
             } else {
-                System.out.println("Error. Server returned a status code " + httpResponse.statusCode());
+                throw new IOException("Не правильный код запроса!");
             }
         } catch (IOException | InterruptedException e) {
-            System.out.println("Request error!");
+            throw new IOException("Не правильный код запроса!");
         }
 
     }
 
-    public String load(String key) {
+    public String load(String key) throws InterruptedException {
         String value = "";
         String receivedJson = "";
         URI loadUrl = URI.create(receivedUri + "/load/" + key + "?API_TOKEN=" + apiToken);
@@ -78,10 +82,10 @@ public class KVTaskClient {
             if (httpResponse.statusCode() == 200) {
                 receivedJson = httpResponse.body();
             } else {
-                System.out.println("Error. Server returned a status code " + httpResponse.statusCode());
+                throw new IOException("Не верный код запроса!");
             }
         } catch (IOException | InterruptedException e) {
-            System.out.println("Request error!");
+            throw new InterruptedException("Не верный код запроса!");
         }
         value = gson.fromJson(receivedJson, String.class);
         return value;

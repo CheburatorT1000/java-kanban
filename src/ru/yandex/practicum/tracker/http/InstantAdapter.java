@@ -1,4 +1,4 @@
-package ru.yandex.practicum.tracker.HTTP;
+package ru.yandex.practicum.tracker.http;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
@@ -7,11 +7,14 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.time.Instant;
 
-class InstantAdapter extends TypeAdapter<Instant> {
+public class InstantAdapter extends TypeAdapter<Instant> {
 
     @Override
     public void write(final JsonWriter jsonWriter, final Instant instant) throws IOException {
-        jsonWriter.value(instant.toEpochMilli());
+        if(instant != null) {
+            jsonWriter.value(instant.toEpochMilli());
+        } else
+            jsonWriter.nullValue();
     }
 
     @Override

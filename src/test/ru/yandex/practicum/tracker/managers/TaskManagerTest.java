@@ -7,6 +7,7 @@ import ru.yandex.practicum.tracker.tasks.SimpleTask;
 import ru.yandex.practicum.tracker.tasks.Status;
 import ru.yandex.practicum.tracker.tasks.SubTask;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     protected abstract T createManager();
 
     @BeforeEach
-    void getManager() {
+    void getManager() throws IOException {
         managerForTest = createManager();
     }
 

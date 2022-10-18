@@ -1,4 +1,4 @@
-package ru.yandex.practicum.tracker.HTTP;
+package ru.yandex.practicum.tracker.http;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,13 +37,13 @@ public class HttpTaskServer {
     }
 
     public void serverStart() {
-        System.out.println("HTTP-сервер запущен на " + PORT + " порту!");
+        System.out.println("http-сервер запущен на " + PORT + " порту!");
         httpServer.start();
 
     }
 
     public void serverStop() {
-        System.out.println("HTTP-сервер остановлен на " + PORT + " порту!");
+        System.out.println("http-сервер остановлен на " + PORT + " порту!");
         httpServer.stop(1);
 
     }
@@ -62,17 +62,17 @@ public class HttpTaskServer {
 
                     if (path.contains("/tasks/task") && query == null) {
                         System.out.println("getAllSimpleTasks()");
-                        response = gson.toJson(new ArrayList<>(taskManager.getAllSimpleTasks()));
+                        response = gson.toJson(taskManager.getAllSimpleTasks());
                         statusCode = 200;
 
                     } else if (path.contains("/tasks/epic") && query == null) {
                         System.out.println("getAllEpicTasks()");
-                        response = gson.toJson(new ArrayList<>(taskManager.getAllEpicTasks()));
+                        response = gson.toJson(taskManager.getAllEpicTasks());
                         statusCode = 200;
 
                     } else if (path.contains("/tasks/subtask") && query == null) {
                         System.out.println("getAllSubTasks()");
-                        response = gson.toJson(new ArrayList<>(taskManager.getAllSubTasks()));
+                        response = gson.toJson(taskManager.getAllSubTasks());
                         statusCode = 200;
 
                     } else if (path.contains("/tasks/subtask/epic") && query != null) {
@@ -101,22 +101,22 @@ public class HttpTaskServer {
 
                     } else if (path.contains("/tasks/history") && query == null) {
                         System.out.println("getHistory()");
-                        response = gson.toJson(new ArrayList<>(taskManager.getHistory()));
+                        response = gson.toJson(taskManager.getHistory());
                         statusCode = 200;
                     } else if (path.contains("/tasks") && query == null) {
                         System.out.println("getPrioritizedTasks()");
-                        response = gson.toJson(new ArrayList<>(taskManager.getPrioritizedTasks()));
+                        response = gson.toJson(taskManager.getPrioritizedTasks());
                         statusCode = 200;
                     }
                     break;
                 }
 
                 case "POST": {
+                    InputStream inputStream = httpExchange.getRequestBody();
+                    String body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
 
                     if (path.contains("/tasks/task")) {
 
-                        InputStream inputStream = httpExchange.getRequestBody();
-                        String body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
                         SimpleTask simpleTask = gson.fromJson(body, SimpleTask.class);
                         if (taskManager.getSimpleTaskByID(simpleTask.getId()) == null) {
                             taskManager.addSimpleTask(simpleTask);
@@ -126,8 +126,6 @@ public class HttpTaskServer {
 
                     } else if (path.contains("/tasks/epic")) {
 
-                        InputStream inputStream = httpExchange.getRequestBody();
-                        String body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
                         Epic epic = gson.fromJson(body, Epic.class);
                         if (taskManager.getEpicTaskByID(epic.getId()) == null) {
                             taskManager.addEpicTask(epic);
@@ -137,8 +135,6 @@ public class HttpTaskServer {
 
                     } else if (path.contains("/tasks/subtask")) {
 
-                        InputStream inputStream = httpExchange.getRequestBody();
-                        String body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
                         SubTask subtask = gson.fromJson(body, SubTask.class);
                         if (taskManager.getSubTaskByID(subtask.getId()) == null) {
                             taskManager.addSubTask(subtask);
